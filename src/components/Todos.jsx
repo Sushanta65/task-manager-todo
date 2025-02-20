@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import TaskColumn from "./TaskColumn";
+import { Link } from "react-router-dom";
 
 const Todos = () => {
-  const [tasks, setTasks] = useState([
-    { id: "1", title: "Task 1", description: "Description 1", category: "to-do" },
-    { id: "2", title: "Task 2", description: "Description 2", category: "in-progress" },
-    { id: "3", title: "Task 3", description: "Description 3", category: "done" },
-  ]);
+  const [tasks, setTasks] = useState([]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -34,6 +31,9 @@ const Todos = () => {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="w-3/5 mx-auto bg-gray-200 text-center p-5">
+      <div>
+        <Link to={'/login'}>Login</Link>
+      </div>
         <div>
           <h2 className="text-lg font-semibold mb-2">Add Task</h2>
           <form onSubmit={handleSubmit} className="mb-4">
