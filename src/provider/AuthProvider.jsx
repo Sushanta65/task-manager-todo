@@ -1,4 +1,4 @@
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
 import React, { createContext, useState, useEffect } from "react";
 import { app } from "../firebase.init";
 import { useNavigate } from "react-router-dom";
@@ -18,13 +18,20 @@ const AuthProvider = ({ children }) => {
     signInWithPopup(auth, provider)
       .then((res) => {
         setUser(res.user);
-        navigate('/todos')
+        navigate('/')
         console.log('res from authProvider', res.user)
       })
       .catch((err) => {
         console.error(err);
       })
   };
+
+  const signOutUser = () => {
+    signOut(auth).then(() => {
+      console.log('user signed out')
+    })
+  }
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -36,7 +43,7 @@ const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  const userInfo = { user, signInUser, loading };
+  const userInfo = { user, signInUser, loading, signOutUser };
 
   return (
     <AuthContext.Provider value={userInfo}>
