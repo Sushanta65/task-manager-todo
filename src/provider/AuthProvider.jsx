@@ -2,6 +2,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signO
 import React, { createContext, useState, useEffect } from "react";
 import { app } from "../firebase.init";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export const AuthContext = createContext();
 
@@ -18,6 +19,11 @@ const AuthProvider = ({ children }) => {
     signInWithPopup(auth, provider)
       .then((res) => {
         setUser(res.user);
+        Swal.fire({
+          title: "Drag me!",
+          icon: "success",
+          draggable: true
+        });
         navigate('/')
         console.log('res from authProvider', res.user)
       })

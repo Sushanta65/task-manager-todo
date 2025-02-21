@@ -10,16 +10,16 @@ const Home = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 text-center px-5">
-      {/* Hero Section */}
       <div className="max-w-xl bg-white p-8 rounded-lg shadow-lg">
         <h1 className="text-4xl font-bold text-blue-900 mb-4">
           Welcome to Task Manager!
         </h1>
         <p className="text-gray-600 mb-6 text-lg">
-          Organize your tasks efficiently with our <strong>drag-and-drop</strong> feature. Sign in to start managing your tasks today!
+          Organize your tasks efficiently with our{" "}
+          <strong>drag-and-drop</strong> feature. Sign in to start managing your
+          tasks today!
         </p>
 
-        {/* Buttons */}
         <div className="flex justify-center space-x-4">
           <Link
             to="/todos"
@@ -45,7 +45,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Features Section */}
       <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl">
         <div className="p-6 bg-white shadow-lg rounded-lg flex flex-col items-center">
           <AiOutlineCheckCircle className="text-blue-900 text-4xl mb-3" />
@@ -58,7 +57,8 @@ const Home = () => {
           <BsFillClipboardDataFill className="text-blue-900 text-4xl mb-3" />
           <h3 className="font-bold text-lg text-gray-800">Drag & Drop</h3>
           <p className="text-gray-600 text-sm text-center">
-            Easily move tasks between categories with a smooth drag-and-drop experience.
+            Easily move tasks between categories with a smooth drag-and-drop
+            experience.
           </p>
         </div>
         <div className="p-6 bg-white shadow-lg rounded-lg flex flex-col items-center">
