@@ -1,42 +1,81 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import TaskColumn from "./TaskColumn";
-import { Link } from "react-router-dom";
+import TaskColumn from "./TaskColumn";  // Import TaskColumn component
 import { AuthContext } from "../provider/AuthProvider";
 import { FiLogOut } from "react-icons/fi";
 import { AiOutlineHome } from "react-icons/ai";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Todos = () => {
   const [tasks, setTasks] = useState([]);
   const { user, signOutUser } = useContext(AuthContext);
 
-  const handleSubmit = (e) => {
+  // Fetch tasks from the database
+  useEffect(() => {
+    if (user?.uid) {
+      axios
+        .get(`http://localhost:5000/tasks?userId=${user.uid}`)
+        .then((res) => setTasks(res.data))
+        .catch((err) => console.error("Error fetching tasks:", err));
+    }
+  }, [user?.uid]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const task = e.target.task.value.trim();
+    const title = e.target.task.value.trim();
     const description = e.target.description.value.trim();
 
-    if (!task) {
+    if (!title) {
       alert("Task title is required!");
       return;
     }
 
     const newTask = {
-      id: Date.now().toString(),
-      title: task,
+      userId: user?.uid,
+      title,
       description,
       category: "to-do",
     };
 
-    setTasks([...tasks, newTask]);
-    e.target.reset();
+    try {
+      const res = await axios.post("http://localhost:5000/tasks", newTask);
+      setTasks([...tasks, { ...newTask, _id: res.data.insertedId }]);
+      e.target.reset();
+    } catch (error) {
+      console.error("Error adding task:", error);
+    }
+  };
+
+  // Move task to another category and update the backend
+  const moveTaskToCategory = async (taskId, newCategory) => {
+    // Find the task being moved
+    const updatedTasks = tasks.map((task) =>
+      task._id === taskId ? { ...task, category: newCategory, title: task.title, description: task.description } : task
+    );
+
+    // Update state with the new category
+    setTasks(updatedTasks);
+    console.log("updated task",updatedTasks)
+    try {
+      // Send the updated task category to the backend
+      await axios.put(`http://localhost:5000/tasks/${taskId}`, {
+        category: newCategory,
+        title: updatedTasks.map(taskTitle => taskTitle._id === taskId? taskTitle.title : ''),
+        description: updatedTasks.map(taskDescription => taskDescription._id === taskId? taskDescription.description : ''),
+
+      });
+    } catch (error) {
+      console.error("Error updating task category:", error);
+    }
   };
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="min-h-screen bg-gray-100">
+      <div className="min-h-screen bg-gray-100 pt-10 py-10">
         {/* Header Section */}
-        <div className="bg-blue-900 text-white flex justify-between items-center p-4 shadow-md">
+        <div className="w-4/5 mx-auto rounded-lg mb-10 bg-blue-900 text-white flex justify-between items-center p-4 shadow-md">
           <div className="flex items-center gap-3">
             {user?.photoURL && (
               <img
@@ -90,27 +129,28 @@ const Todos = () => {
 
         {/* Task Management Section */}
         <div className="w-11/12 max-w-5xl mx-auto mt-6">
-          <h2 className="text-2xl font-bold text-center text-blue-900 mb-4">
+          <h2 className="text-2xl font-bold text-center text-blue-900 mb-4 py-5">
             Task Manager
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <TaskColumn
               title="To-Do"
               category="to-do"
-              tasks={tasks}
-              setTasks={setTasks}
+              tasks={tasks.filter((task) => task.category === "to-do")}
+              moveTaskToCategory={moveTaskToCategory}
             />
             <TaskColumn
               title="In Progress"
               category="in-progress"
-              tasks={tasks}
-              setTasks={setTasks}
+              tasks={tasks.filter((task) => task.category === "in-progress")}
+              moveTaskToCategory={moveTaskToCategory}
+              
             />
             <TaskColumn
               title="Completed"
               category="done"
-              tasks={tasks}
-              setTasks={setTasks}
+              tasks={tasks.filter((task) => task.category === "done")}
+              moveTaskToCategory={moveTaskToCategory}
             />
           </div>
         </div>

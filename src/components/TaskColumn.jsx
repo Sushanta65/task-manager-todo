@@ -1,33 +1,50 @@
 import React from "react";
-import { useDrop } from "react-dnd";
+import { useDrop } from "react-dnd"; // Import useDrop for handling drop events
 import TaskItem from "./TaskItem";
 
-const TaskColumn = ({ title, category, tasks, setTasks }) => {
-  const [{ isOver }, drop] = useDrop(() => ({
-    accept: "TASK",
-    drop: (item) => {
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task.id === item.id ? { ...task, category } : task
-        )
-      );
+const TaskColumn = ({ title, category, tasks, moveTaskToCategory }) => {
+  // Define colors for different columns based on the category
+  const columnStyles = {
+    "to-do": {
+      textColor: "text-blue-700",
     },
+    "in-progress": {
+   
+      textColor: "text-yellow-700",
+    },
+    "done": {
+      
+      textColor: "text-green-700",
+    },
+  };
+
+  const [{ isOver }, drop] = useDrop({
+    accept: "TASK", // Specify the type of draggable item
+    drop: (item) => moveTaskToCategory(item._id, category), // Move the task to the new category
     collect: (monitor) => ({
-      isOver: monitor.isOver(),
+      isOver: monitor.isOver(), // Track if the item is being hovered over the drop zone
     }),
-  }));
+  });
 
   return (
     <div
       ref={drop}
-      className={`w-full p-3 border rounded-md ${isOver ? "bg-blue-200" : "bg-gray-100"}`}
+      className={`task-column p-6   hover:shadow-lg transition-all duration-300 ease-in-out transform ${
+        columnStyles[category]?.bgColor || "bg-gray-200"
+      }`}
+      style={{
+        minHeight: "400px",
+        maxWidth: "320px",
+      }}
     >
-      <h2 className="font-semibold">{title}</h2>
-      {tasks
-        .filter((task) => task.category === category)
-        .map((task) => (
-          <TaskItem key={task.id} task={task} />
+      <h3 className={`text-xl font-semibold ${columnStyles[category]?.textColor || "text-blue-900"} mb-6`}>
+        {title}
+      </h3>
+      <div className="space-y-4">
+        {tasks.map((task) => (
+          <TaskItem key={task._id} task={task} />
         ))}
+      </div>
     </div>
   );
 };

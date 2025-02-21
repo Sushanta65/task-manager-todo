@@ -3,10 +3,13 @@ import { Navigate } from "react-router-dom";
 import { AuthContext } from "../provider/AuthProvider";
 
 const PrivateRoute = ({ children }) => {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
 
   console.log('from private route',user); // Debugging to check user data
 
+  if (loading) {
+    return <p>Loading...</p>; // Prevent redirect while loading
+  }
   if (user && user.email) {
     return children;
   }
