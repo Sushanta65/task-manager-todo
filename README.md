@@ -1,8 +1,36 @@
-# React + Vite
+# Task Management Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Short Description
+A feature-rich Task Management Application with Firebase Authentication, MongoDB (without Mongoose), Express.js, and a drag-and-drop interface for task categorization and real-time synchronization.
 
-Currently, two official plugins are available:
+## Live Links
+- 🌐 **Live Site:** [Your Deployed Link Here](https://your-live-site-link.com)
+- 🔧 **Backend API:** [Your Backend Link Here](https://your-backend-link.com)
+- 📂 **Repository:** [GitHub Repo](https://github.com/your-repo-link)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Dependencies
+This project uses the following dependencies:
+
+### Frontend:
+- React.js
+- Tailwind CSS & DaisyUI
+- React Router DOM
+- Firebase Authentication
+- React DnD (Drag and Drop)
+- React Icons
+- SweetAlert2
+
+### Backend:
+- Express.js
+- MongoDB (without Mongoose)
+- Firebase Admin SDK
+- Cors
+- Dotenv
+
+## Installation Steps
+Follow these steps to set up the project locally:
+
+### 1️⃣ Clone the Repository
+```sh
+git clone https://github.com/your-repo-link.git
+cd your-project-folder
