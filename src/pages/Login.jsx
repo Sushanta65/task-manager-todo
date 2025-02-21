@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../provider/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  return (
+  const {signInUser} = useContext(AuthContext)
+    const navigate = useNavigate()
+  return ( 
     <div className="max-w-sm mx-auto mt-16 p-6 border rounded-lg shadow-lg bg-white">
       <h2 className="text-xl font-semibold mb-4">Login</h2>
       <form className="space-y-4">
@@ -44,7 +48,7 @@ const Login = () => {
 
       {/* Google Login Button */}
       <div className="mt-4">
-        <button className="w-full bg-red-500 text-white py-2 rounded-md">
+        <button onClick={() => signInUser(navigate)} className="w-full bg-red-500 text-white py-2 rounded-md">
           <div className="flex justify-center items-center">
             <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo" className="w-5 h-5 mr-2" />
             Log in with Google
