@@ -16,7 +16,9 @@ const Todos = () => {
   useEffect(() => {
     if (user?.uid) {
       axios
-        .get(`http://localhost:5000/tasks?userId=${user.uid}`)
+        .get(
+          `https://task-manager-todo-server.vercel.app/tasks?userId=${user.uid}`
+        )
         .then((res) => setTasks(res.data))
         .catch((err) => console.error("Error fetching tasks:", err));
     }
@@ -31,7 +33,7 @@ const Todos = () => {
       Swal.fire({
         title: "Please Fil Up The Form",
         icon: "error",
-        draggable: true
+        draggable: true,
       });
       return;
     }
@@ -44,13 +46,16 @@ const Todos = () => {
     };
 
     try {
-      const res = await axios.post("http://localhost:5000/tasks", newTask);
+      const res = await axios.post(
+        "https://task-manager-todo-server.vercel.app/tasks",
+        newTask
+      );
       setTasks([...tasks, { ...newTask, _id: res.data.insertedId }]);
       e.target.reset();
       Swal.fire({
         title: "Task Added",
         icon: "success",
-        draggable: true
+        draggable: true,
       });
     } catch (error) {
       console.error("Error adding task:", error);
@@ -72,15 +77,18 @@ const Todos = () => {
     setTasks(updatedTasks);
     console.log("updated task", updatedTasks);
     try {
-      await axios.put(`http://localhost:5000/tasks/${taskId}`, {
-        category: newCategory,
-        title: updatedTasks.map((taskTitle) =>
-          taskTitle._id === taskId ? taskTitle.title : ""
-        ),
-        description: updatedTasks.map((taskDescription) =>
-          taskDescription._id === taskId ? taskDescription.description : ""
-        ),
-      });
+      await axios.put(
+        `https://task-manager-todo-server.vercel.app/tasks/${taskId}`,
+        {
+          category: newCategory,
+          title: updatedTasks.map((taskTitle) =>
+            taskTitle._id === taskId ? taskTitle.title : ""
+          ),
+          description: updatedTasks.map((taskDescription) =>
+            taskDescription._id === taskId ? taskDescription.description : ""
+          ),
+        }
+      );
     } catch (error) {
       console.error("Error updating task category:", error);
     }
@@ -111,8 +119,12 @@ const Todos = () => {
               />
             )}
             <div>
-              <h2 className="text-lg font-semibold hidden md:block">{user?.displayName}</h2>
-              <p className="text-sm opacity-80 hidden md:block">{user?.email}</p>
+              <h2 className="text-lg font-semibold hidden md:block">
+                {user?.displayName}
+              </h2>
+              <p className="text-sm opacity-80 hidden md:block">
+                {user?.email}
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-4">

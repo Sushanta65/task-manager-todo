@@ -23,7 +23,7 @@ const TaskItem = ({ task, onEdit, onDelete }) => {
 
   const handleSave = (taskId) => {
     axios
-      .put(`http://localhost:5000/tasks/${taskId}`, {
+      .put(`https://task-manager-todo-server.vercel.app/tasks/${taskId}`, {
         ...task,
         title: editedTitle,
         description: editedDescription,
@@ -33,7 +33,7 @@ const TaskItem = ({ task, onEdit, onDelete }) => {
         Swal.fire({
           title: "Update Successfull.",
           icon: "success",
-          draggable: true
+          draggable: true,
         });
         onEdit({ ...task, title: editedTitle, description: editedDescription });
         setIsModalOpen(false);
@@ -43,13 +43,13 @@ const TaskItem = ({ task, onEdit, onDelete }) => {
 
   const handleDelete = (taskId) => {
     axios
-      .delete(`http://localhost:5000/tasks/${taskId}`)
+      .delete(`https://task-manager-todo-server.vercel.app/tasks/${taskId}`)
       .then((res) => {
         console.log(res.data);
         Swal.fire({
           title: "Deleted Successfully",
           icon: "error",
-          draggable: true
+          draggable: true,
         });
         onDelete(taskId);
       })
